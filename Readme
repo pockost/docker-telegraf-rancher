@@ -1,0 +1,45 @@
+A docker telegraf image ready for working with rancher
+======================================================
+
+Inspire by http://work.haufegroup.io/monitoring-docker-environment/
+
+
+Available environment variable :
+================================
+
+`INFLUXDB_HOST` : The InfluxDB Hostname or IP
+`INFLUXDB_NAME` : The InfluxDB Database name
+`INFLUXDB_USER` : The InfluxDB Username
+`INFLUXDB_PASSWORD` : The InfluxDB Password
+
+
+Example compose file
+====================
+
+
+```
+version: '2'
+services:
+  telegraf:
+    environment:
+      INFLUXDB_HOST: <influxdb_host>
+      INFLUXDB_NAME: <influxdb_name>
+      INFLUXDB_USER: <influx_user_with_write_access>
+      INFLUXDB_PASSWORD: <influx_password>
+      HOST_MOUNT_PREFIX: /hostfs
+      HOST_ETC: /hostfs/etc
+    image: pockost/telegraf-rancher
+    stdin_open: true
+    tty: true
+    labels:
+      io.rancher.container.pull_image: always
+      io.rancher.scheduler.global: 'true'
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock:ro
+    - /sys:/rootfs/sys:ro
+    - /proc:/rootfs/proc:ro
+    - /etc:/rootfs/etc:ro
+    - /:/hostfs:ro
+    stdin_open: true
+    mem_limit: 16777216
+```
