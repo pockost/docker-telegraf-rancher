@@ -23,29 +23,86 @@ Example compose file
 ====================
 
 
+The docker-compose.yml file
+
 ```
 version: '2'
 services:
   telegraf:
-    environment:
-      INFLUXDB_HOST: <influxdb_host>
-      INFLUXDB_NAME: <influxdb_name>
-      INFLUXDB_USER: <influx_user_with_write_access>
-      INFLUXDB_PASSWORD: <influx_password>
-      HOST_MOUNT_PREFIX: /hostfs
-      HOST_ETC: /hostfs/etc
+    mem_limit: 16777216
     image: pockost/telegraf-rancher
+    environment:
+      HOST_ETC: /hostfs/etc
+      HOST_MOUNT_PREFIX: /hostfs
+      INFLUXDB_HOST: http://influxdb:8086
+      INFLUXDB_NAME: my_infuxdb_dbname
+      INFLUXDB_PASSWORD: my_infuxdb_password
+      INFLUXDB_USER: my_infuxdb_username
+      HOST_SYS: /hostfs/sys
+      HOST_PROC: /hostfs/proc
     stdin_open: true
-    tty: true
-    labels:
-      io.rancher.container.pull_image: always
-      io.rancher.scheduler.global: 'true'
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock:ro
     - /sys:/rootfs/sys:ro
     - /proc:/rootfs/proc:ro
     - /etc:/rootfs/etc:ro
     - /:/hostfs:ro
+    tty: true
+    links:
+    - influxdb:influxdb
+    labels:
+      io.rancher.container.pull_image: always
+      io.rancher.scheduler.global: 'true'
+  grafana:
+    image: grafana/grafana
     stdin_open: true
-    mem_limit: 16777216
+    volumes:
+    - /path/to/local/grafana/data:/var/lib/grafana/
+    tty: true
+    labels:
+      io.rancher.container.pull_image: always
+  influxdb:
+    image: influxdb:alpine
+    environment:
+      INFLUXDB_DB: my_infuxdb_dbname
+      INFLUXDB_HTTP_AUTH_ENABLED: 'true'
+      INFLUXDB_ADMIN_USER: my_infuxdb_admin_username
+      INFLUXDB_ADMIN_PASSWORD: my_infuxdb_admin_password
+      INFLUXDB_USER: my_infuxdb_username
+      INFLUXDB_USER_PASSWORD: my_infuxdb_password
+    stdin_open: true
+    volumes:
+    - /path/to/local/influxdb/data:/var/lib/influxdb
+    tty: true
+    logging:
+      driver: json-file
+      options:
+        max-size: 200k
+        max-file: '10'
+    labels:
+      io.rancher.container.pull_image: always
+
 ```
+
+The rancher-compose.yml file
+
+```
+version: '2'
+services:
+  telegraf:
+    start_on_create: true
+  grafana:
+    scale: 1
+    start_on_create: true
+  influxdb:
+    scale: 1
+    start_on_create: true
+```
+
+Notes
+=====
+
+* The grafana default account is admin/admin. Don't forget to change this !!!
+* In grafana you have to create a datasource for influxdb. Use `http://influxdb:8086` as URL and the informations you enter in INFLUXDB_USER, INFLUXDB_USER_PASSWORD and INFLUXDB_DB for username/password and database name.
+* You can use this dashboard : https://grafana.com/dashboards/3056
+
