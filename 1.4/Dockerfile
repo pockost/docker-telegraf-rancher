@@ -1,4 +1,4 @@
-FROM telegraf:alpine
+FROM telegraf:1.4.5-alpine
 
 RUN apk update && apk add curl
 
