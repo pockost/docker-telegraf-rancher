@@ -1,7 +1,9 @@
 Supported tags and respective Dockerfile links
 ==============================================
 1.3, 1.3.5 ([docker-telegraf-rancher/1.3/Dockerfile](https://github.com/pockost/docker-telegraf-rancher/blob/master/1.3.5/Dockerfile))
-1.4, 1.4.5, latest ([docker-telegraf-rancher/1.4/Dockerfile](https://github.com/pockost/docker-telegraf-rancher/blob/master/1.4.5/Dockerfile))
+1.4, 1.4.5 ([docker-telegraf-rancher/1.4/Dockerfile](https://github.com/pockost/docker-telegraf-rancher/blob/master/1.4.5/Dockerfile))
+1.5, 1.5.3 ([docker-telegraf-rancher/1.5/Dockerfile](https://github.com/pockost/docker-telegraf-rancher/blob/master/1.5.3/Dockerfile))
+1.6, 1.6.0, latest ([docker-telegraf-rancher/1.6/Dockerfile](https://github.com/pockost/docker-telegraf-rancher/blob/master/1.6.0/Dockerfile))
 
 
 A docker telegraf image ready for working with rancher
