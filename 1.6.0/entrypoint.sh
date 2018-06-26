@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-export INFLUX_TELEGRAF_HOST=$(curl "http://rancher-metadata/2015-07-25/self/host/hostname")
+export INFLUX_TELEGRAF_HOST=$(curl -s --unix-socket /var/run/docker.sock http/info | jq -r '.Name')
 
 if [ "${1:0:1}" = '-' ]; then
   set -- telegraf "$@"
