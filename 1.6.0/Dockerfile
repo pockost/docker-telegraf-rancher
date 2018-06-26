@@ -1,4 +1,4 @@
-FROM telegraf:1.5.3-alpine
+FROM telegraf:1.6-alpine
 
 RUN apk add --no-cache curl jq
 
