@@ -17,7 +17,7 @@ if [[ -n "$MOUNT_POINTS" ]]; then
     fi
   done
 
-  sed -i "s/\#\ mount_points\ =\ \[\"\/\"\]/mount_points\ =\ \[$result\]/" /etc/telegraf/telegraf.conf
+  sed -i "s|# mount_points = \[\"\/\"\]|mount_points = \[$result\]|" /etc/telegraf/telegraf.conf
 
 fi
 
